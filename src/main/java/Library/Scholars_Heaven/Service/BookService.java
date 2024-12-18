@@ -3,7 +3,9 @@ package Library.Scholars_Heaven.Service;
 import Library.Scholars_Heaven.Entity.Book;
 import Library.Scholars_Heaven.Repo.BookRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.ErrorResponseException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class BookService {
         return bookRepo.save(book);
     }
 
-    public Optional<Book> getBookById(Long id) {
+    public Optional<Book> getBookById(String id) {
         return bookRepo.findById(id);
     }
 
@@ -36,16 +38,25 @@ public class BookService {
         return bookRepo.findAll();
     }
 
-    public boolean deleteBook(Long id) {
+//    public boolean deleteBook(String id) {
+//        if (bookRepo.existsById(id)) {
+//            bookRepo.deleteById(id);
+//            return true;
+//        }
+//        return false;
+//
+//    }
+    public String deleteBookById(String id) {
         if (bookRepo.existsById(id)) {
             bookRepo.deleteById(id);
-            return true;
+            return "Book with ID " + id + " deleted successfully";
+//            throw ("Book with id" + id + " not found");
+        } else {
+            return "Book with ID " + id + " not found";
         }
-        return false;
-
     }
 
-    public Optional<Book> updateBook(Long id, Book updatedBook) {
+    public Optional<Book> updateBook(String id, Book updatedBook) {
         Optional<Book> existingBook = bookRepo.findById(id);
         if (existingBook.isPresent()) {
             Book bookUpdate = existingBook.get();

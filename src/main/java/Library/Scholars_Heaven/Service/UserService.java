@@ -1,10 +1,12 @@
 package Library.Scholars_Heaven.Service;
 
+import Library.Scholars_Heaven.Entity.Book;
 import Library.Scholars_Heaven.Entity.User;
 import Library.Scholars_Heaven.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +30,35 @@ public class UserService {
         }
         return userRepo.save(user);
     }
+
+    public List<User> getAllusers() {
+        return userRepo.findAll();
+    }
+
+    public String deleteUserById(String id) {
+        if (userRepo.existsById(id)) {
+            userRepo.deleteById(id);
+            return "User with ID " + id + " deleted successfully";
+//            throw ("Book with id" + id + " not found");
+        } else {
+            return "User with ID " + id + " not found";
+        }
+    }
+
+    public Optional<User> updateUser(String id, User updatedUser) {
+        Optional<User> existingUser = userRepo.findById(id);
+        if(existingUser.isPresent()){
+            User userUpdate = existingUser.get();
+//            userUpdate.setId(updatedUser.getId());
+            userUpdate.setName(updatedUser.getName());
+            userUpdate.setEmail(updatedUser.getEmail());
+            userUpdate.setPassword(updatedUser.getPassword());
+            userUpdate.setPhoneNumber(updatedUser.getPhoneNumber());
+            userUpdate.setRole(updatedUser.getRole());
+        }
+        return Optional.empty();
+    }
+
 
 
     /**

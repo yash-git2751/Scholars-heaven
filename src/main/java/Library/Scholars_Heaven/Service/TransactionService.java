@@ -7,16 +7,11 @@ import Library.Scholars_Heaven.Repo.BookRepo;
 import Library.Scholars_Heaven.Repo.TransactionRepo;
 import Library.Scholars_Heaven.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Optional;
-
-import static java.time.LocalDate.*;
+import java.util.List;
 
 @Service
 public class TransactionService {
@@ -27,7 +22,7 @@ public class TransactionService {
     @Autowired
     public UserRepo userRepo;
 
-    public BookTransaction issueBook(Long bookId, Long userId)throws Exception{
+    public BookTransaction issueBook(String bookId, String userId)throws Exception{
         Book book = bookRepo.findById(bookId)
                 .orElseThrow(() -> new Exception("Book not found with Id " + bookId));
 
@@ -57,7 +52,7 @@ public class TransactionService {
 
     }
 
-    public BookTransaction returnedBook(Long bookId, Long userId)throws Exception{
+    public BookTransaction returnedBook(String bookId, String userId)throws Exception{
         BookTransaction transaction = transactionRepo.findByBookIdAndUserId(bookId,userId)
                 .orElseThrow(() -> new  Exception("not found for book ID "+ bookId + "and user ID " + userId));
 
@@ -65,20 +60,11 @@ public class TransactionService {
         transaction.setReturned(true);
         return transactionRepo.save(transaction);
     }
+
+    public List<BookTransaction> getAllTransactions() {
+        return transactionRepo.findAll();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -14,14 +15,14 @@ import java.time.LocalDate;
 public class BookTransaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "books_id", nullable = false)
     private Book book;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
@@ -42,6 +43,10 @@ public class BookTransaction {
         return returnedDate !=null ? returnedDate.toString():" yet returned";
     }
 
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
+    }
 //    public boolean isReturned() {
 //        return isReturned;
 //    }

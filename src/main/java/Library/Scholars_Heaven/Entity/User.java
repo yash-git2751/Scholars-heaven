@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
   * User entity class representing the user and admin details
@@ -20,13 +21,14 @@ import java.util.List;
 public class User {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+
     private String name;
 
     @Email
    // @NotBlank
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+//    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
     private String email;
 
     //@NotBlank
@@ -38,7 +40,11 @@ public class User {
    // @NotBlank
     private String role;
 
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
+    }
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<BookTransaction> transactions;
+//    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+//    private List<BookTransaction> transactions;
 }
